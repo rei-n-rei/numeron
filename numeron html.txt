@@ -1,20 +1,29 @@
-<h1 id="gameTitle">ヌメロン</h1>
-<p>3桁の重複なし数字を予想してください</p>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ヌメロン</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1 id="gameTitle">ヌメロン</h1>
+  <p>3桁の重複なし数字を予想してください</p>
 
-<!-- プレイヤーの予想入力 -->
-<input type="text" id="guess" maxlength="3" placeholder="例: 123" />
-<button onclick="checkVsComputer()">判定</button>
-<button onclick="resetVsComputer()">リセット</button>
+  <input type="text" id="guess" maxlength="3" placeholder="例: 123" />
+  <button onclick="checkVsComputer()">判定</button>
+  <button onclick="resetVsComputer()">リセット</button>
 
-<hr style="margin: 20px 0;">
+  <hr style="margin: 20px 0;">
+  <p>🔁 何ターンごとにCPUの答えを変更しますか？</p>
+  <input type="number" id="changeInterval" value="3" min="1" max="20" style="width: 80px;" />
+  <span style="font-size: 0.9em;">ターンごとに1桁変更（重複なし）</span>
 
-<!-- ターン間隔入力 -->
-<p>🔁 何ターンごとにCPUの答えを変更しますか？</p>
-<input type="number" id="changeInterval" value="3" min="1" max="20" style="width: 80px;" />
-<span style="font-size: 0.9em;">ターンごとに1桁変更（重複なし）</span>
+  <div id="result" style="margin-top:20px;"></div>
+  <div id="gameHistory" style="margin-top:20px;"></div>
 
-<!-- 結果表示エリア -->
-<div id="result" style="margin-top:20px;"></div>
-
-<!-- ゲーム履歴エリア -->
-<div id="gameHistory" style="margin-top:20px;"></div>
+  <!-- 🔗 Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
