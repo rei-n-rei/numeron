@@ -11,6 +11,21 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// 🔧 Firebase 初期化（自分の Firebase プロジェクト情報に書き換えて)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// 🎮 ゲームロジック
 let cpuNumber = [];
 let cpuHistory = [];
 let playerHistory = [];
@@ -36,7 +51,6 @@ function generateCpuNumber() {
 }
 
 function checkVsComputer() {
-  // ✅ 毎ターン最新の入力値を取得
   const intervalInput = document.getElementById("changeInterval");
   const changeInterval = intervalInput ? parseInt(intervalInput.value) || 3 : 3;
 
@@ -66,19 +80,19 @@ function checkVsComputer() {
   if (hit === 3) {
     resultDiv.innerHTML += `<div style="color: green; margin-top:10px;">🎉 ${currentTurn}ターンで正解！</div>`;
     resultDiv.innerHTML += `<div style="margin-top:12px;"><strong>🔍 CPUの変化履歴：</strong><br>` +
-      cpuHistory.map((val, i) => `ターン ${i + 1}: ${val}`).join('<br>') +
-      `</div>`;
+      cpuHistory.map((val, i) => `ターン ${i + 1}: ${val}`).join('<br>') + `</div>`;
 
-    completedGames.push({
+    const record = {
       date: new Date().toLocaleDateString(),
       turns: currentTurn
-    });
+    };
+    completedGames.push(record);
+    sendResultToFirebase("rei", currentTurn); // ☁️ Firebaseに送信
     displayGameHistory();
   }
 
   document.getElementById("guess").value = "";
 
-  // 🔁 changeIntervalごとにCPUの1桁を重複なしで+1（ターン終了後）
   if (currentTurn % changeInterval === 0) {
     const index = Math.floor(Math.random() * 3);
     const originalDigit = cpuNumber[index];
@@ -112,12 +126,21 @@ function displayGameHistory() {
   });
 }
 
+// ☁️ Firebase API：結果を保存
+function sendResultToFirebase(name, turns) {
+  db.ref("numeronResults").push({
+    player: name,
+    turns: turns,
+    date: new Date().toISOString()
+  });
+}
+
+// ⏱️ ページ初期化処理
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("guess").addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       checkVsComputer();
     }
   });
-
   resetVsComputer();
 });
