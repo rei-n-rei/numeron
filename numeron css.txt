@@ -42,14 +42,6 @@ button:hover {
   background-color: #004999;
 }
 
-#exToggle {
-  background-color: #cc3300;
-}
-
-#exToggle:hover {
-  background-color: #aa2200;
-}
-
 #result, #gameHistory {
   margin-top: 20px;
   font-size: 16px;
