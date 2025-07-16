@@ -1,27 +1,18 @@
 ## Firebaseの初期設定（main.jsの冒頭に追加）
 ```javascript
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyD7bYQDKimoTGvFI23S7ENVhIpi-HePLps",
+  authDomain: "numeron-7c7ee.firebaseapp.com",
+  databaseURL: "https://numeron-7c7ee-default-rtdb.firebaseio.com",
+  projectId: "numeron-7c7ee",
+  storageBucket: "numeron-7c7ee.firebasestorage.app",
+  messagingSenderId: "1056023710959",
+  appId: "1:1056023710959:web:5efd17cf3645c5c4419f1a",
+  measurementId: "G-DMW44ER20M"
 };
+
 firebase.initializeApp(firebaseConfig);
-
-// 🔧 Firebase 初期化（自分の Firebase プロジェクト情報に書き換えて)
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
+const db = firebase.database();
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
