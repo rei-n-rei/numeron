@@ -1,22 +1,3 @@
-## Firebaseの初期設定（main.jsの冒頭に追加）
-```javascript
-const firebaseConfig = {
-  apiKey: "AIzaSyD7bYQDKimoTGvFI23S7ENVhIpi-HePLps",
-  authDomain: "numeron-7c7ee.firebaseapp.com",
-  databaseURL: "https://numeron-7c7ee-default-rtdb.firebaseio.com",
-  projectId: "numeron-7c7ee",
-  storageBucket: "numeron-7c7ee.firebasestorage.app",
-  messagingSenderId: "1056023710959",
-  appId: "1:1056023710959:web:5efd17cf3645c5c4419f1a",
-  measurementId: "G-DMW44ER20M"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-// 🎮 ゲームロジック
 let cpuNumber = [];
 let cpuHistory = [];
 let playerHistory = [];
@@ -64,13 +45,12 @@ function checkVsComputer() {
   playerHistory.push(resultLine);
 
   const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = playerHistory
-    .map((line, i) => `<div>ターン ${i + 1}: ${line}</div>`)
-    .join("");
+  resultDiv.innerHTML = playerHistory.map((line, i) =>
+    `<div>ターン ${i + 1}: ${line}</div>`).join("");
 
   if (hit === 3) {
-    resultDiv.innerHTML += `<div style="color: green; margin-top:10px;">🎉 ${currentTurn}ターンで正解！</div>`;
-    resultDiv.innerHTML += `<div style="margin-top:12px;"><strong>🔍 CPUの変化履歴：</strong><br>` +
+    resultDiv.innerHTML += `<div style="color: green;">🎉 ${currentTurn}ターンで正解！</div>`;
+    resultDiv.innerHTML += `<div><strong>🔍 CPUの変化履歴：</strong><br>` +
       cpuHistory.map((val, i) => `ターン ${i + 1}: ${val}`).join('<br>') + `</div>`;
 
     const record = {
@@ -78,7 +58,7 @@ function checkVsComputer() {
       turns: currentTurn
     };
     completedGames.push(record);
-    sendResultToFirebase("rei", currentTurn); // ☁️ Firebaseに送信
+    sendResultToServer("rei", currentTurn);
     displayGameHistory();
   }
 
@@ -117,21 +97,17 @@ function displayGameHistory() {
   });
 }
 
-// ☁️ Firebase API：結果を保存
-function sendResultToFirebase(name, turns) {
-  db.ref("numeronResults").push({
-    player: name,
-    turns: turns,
-    date: new Date().toISOString()
+function sendResultToServer(name, turns) {
+  fetch("http://localhost:3000/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ player: name, turns })
   });
 }
 
-// ⏱️ ページ初期化処理
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("guess").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-      checkVsComputer();
-    }
+    if (event.key === "Enter") checkVsComputer();
   });
   resetVsComputer();
 });
